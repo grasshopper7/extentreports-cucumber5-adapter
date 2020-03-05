@@ -1,23 +1,13 @@
 package com.aventstack.extentreports.cucumber.adapter;
 
-import gherkin.AstBuilder;
-import gherkin.GherkinDialect;
-import gherkin.GherkinDialectProvider;
-import gherkin.Parser;
-import gherkin.ParserException;
-import gherkin.TokenMatcher;
-import gherkin.ast.Background;
-import gherkin.ast.Examples;
-import gherkin.ast.Feature;
-import gherkin.ast.GherkinDocument;
-import gherkin.ast.Node;
-import gherkin.ast.ScenarioDefinition;
-import gherkin.ast.ScenarioOutline;
-import gherkin.ast.Step;
-import gherkin.ast.TableRow;
+import io.cucumber.core.exception.CucumberException;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.*;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.ast.*;
 import io.cucumber.plugin.event.TestSourceRead;
 
+import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +69,24 @@ final class TestSourcesModel {
         return name.replaceAll("[\\s'_,!]", "-").toLowerCase();
     }
 
+    static URI relativize(URI uri) {
+        if (!"file".equals(uri.getScheme())) {
+            return uri;
+        }
+        if (!uri.isAbsolute()) {
+            return uri;
+        }
+
+        try {
+            URI root = new File("").toURI();
+            URI relative = root.relativize(uri);
+            // Scheme is lost by relativize
+            return new URI("file", relative.getSchemeSpecificPart(), relative.getFragment());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
+    }
+
     void addTestSourceReadEvent(URI path, TestSourceRead event) {
         pathToReadEventMap.put(path, event);
     }
@@ -91,10 +99,6 @@ final class TestSourcesModel {
             return pathToAstMap.get(path).getFeature();
         }
         return null;
-    }
-
-    ScenarioDefinition getScenarioDefinition(URI path, int line) {
-        return getScenarioDefinition(getAstNode(path, line));
     }
 
     AstNode getAstNode(URI path, int line) {
@@ -118,36 +122,6 @@ final class TestSourcesModel {
         return false;
     }
 
-    String getKeywordFromSource(URI uri, int stepLine) {
-        Feature feature = getFeature(uri);
-        if (feature != null) {
-            TestSourceRead event = getTestSourceReadEvent(uri);
-            String trimmedSourceLine = event.getSource().split("\n")[stepLine - 1].trim();
-            GherkinDialect dialect = new GherkinDialectProvider(feature.getLanguage()).getDefaultDialect();
-            for (String keyword : dialect.getStepKeywords()) {
-                if (trimmedSourceLine.startsWith(keyword)) {
-                    return keyword;
-                }
-            }
-        }
-        return "";
-    }
-
-    private TestSourceRead getTestSourceReadEvent(URI uri) {
-        if (pathToReadEventMap.containsKey(uri)) {
-            return pathToReadEventMap.get(uri);
-        }
-        return null;
-    }
-
-    String getFeatureName(URI uri) {
-        Feature feature = getFeature(uri);
-        if (feature != null) {
-            return feature.getName();
-        }
-        return "";
-    }
-
     private void parseGherkinSource(URI path) {
         if (!pathToReadEventMap.containsKey(path)) {
             return;
@@ -164,7 +138,16 @@ final class TestSourcesModel {
             }
             pathToNodeMap.put(path, nodeMap);
         } catch (ParserException e) {
-            // Ignore exceptions
+            // This works because the TestSourceRead event is emitted after
+            // parsing. So if we couldn't parse the feature, it will throw
+            // before emitting the event. So if we can't parse it now, it was
+            // not parsed by the Gherkin 5 parser.
+            throw new CucumberException("" +
+                "You are using a plugin that does not support Gherkin 8+.\n" +
+                "Try to remove the html and/or json formatters. See the\n" +
+                "Cucumber-JVM 5.0.0 release announcement for more information.",
+                e
+            );
         }
     }
 

@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<cucumber.version>5.0.0-RC1</cucumber.version>
+		<cucumber.version>5.0.0</cucumber.version>
 	</properties>
 
 	<dependencies>
@@ -43,6 +43,11 @@
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver</artifactId>
 			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>gherkin-jvm-deps</artifactId>
+			<version>1.0.6</version>
 		</dependency>
 	</dependencies>
 

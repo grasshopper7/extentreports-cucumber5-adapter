@@ -22,22 +22,10 @@ import com.aventstack.extentreports.gherkin.model.Asterisk;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.service.ExtentService;
 
-import gherkin.ast.DataTable;
-import gherkin.ast.DocString;
-import gherkin.ast.Examples;
-import gherkin.ast.Feature;
-import gherkin.ast.Node;
-import gherkin.ast.ScenarioDefinition;
-import gherkin.ast.ScenarioOutline;
-import gherkin.ast.Step;
-import gherkin.ast.TableCell;
-import gherkin.ast.TableRow;
-import gherkin.ast.Tag;
-import gherkin.pickles.PickleCell;
-import gherkin.pickles.PickleRow;
-import gherkin.pickles.PickleString;
-import gherkin.pickles.PickleTable;
+
 import io.cucumber.core.exception.CucumberException;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.ast.*;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.pickles.*;
 import io.cucumber.plugin.ConcurrentEventListener;
 import io.cucumber.plugin.event.EmbedEvent;
 import io.cucumber.plugin.event.EventHandler;
