@@ -2,9 +2,10 @@ package cucumber.examples.java.calculator;
 
 import io.cucumber.java.en.*;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 
 public class ShoppingStepdefs {
     private RpnCalculator calc = new RpnCalculator();

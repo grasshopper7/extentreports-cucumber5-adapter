@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.aventstack.extentreports.ExtentReporter;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ConfigurableReporter;
 import com.aventstack.extentreports.reporter.ExtentAventReporter;
@@ -215,7 +214,7 @@ public class ExtentService
         }
         
         private static void initKlov(Properties properties) {
-            ExtentKlovReporter klov = new ExtentKlovReporter();
+            ExtentKlovReporter klov = new ExtentKlovReporter("Default");
             String configPath = properties == null 
                     ? System.getProperty(CONFIG_KLOV_KEY)
                     : String.valueOf(properties.get(CONFIG_KLOV_KEY));
@@ -252,7 +251,7 @@ public class ExtentService
                     : properties.get(configKey);
             if (configPath != null && !String.valueOf(configPath).isEmpty())
                 r.loadXMLConfig(String.valueOf(configPath));
-            INSTANCE.attachReporter(((ExtentReporter) r));
+            INSTANCE.attachReporter(( r));
         }
     }
     

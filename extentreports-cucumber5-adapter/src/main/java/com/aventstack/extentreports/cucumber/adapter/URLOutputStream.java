@@ -1,6 +1,6 @@
 package com.aventstack.extentreports.cucumber.adapter;
 
-import gherkin.deps.com.google.gson.Gson;
+//import gherkin.deps.com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import io.cucumber.core.internal.gherkin.deps.com.google.gson.Gson;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

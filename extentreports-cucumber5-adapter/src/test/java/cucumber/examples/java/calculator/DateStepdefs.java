@@ -1,10 +1,11 @@
 package cucumber.examples.java.calculator;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.Date;
 
 import io.cucumber.java.en.*;
 
-import static org.junit.Assert.assertEquals;
 
 public class DateStepdefs {
     private String result;

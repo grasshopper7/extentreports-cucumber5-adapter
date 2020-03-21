@@ -1,8 +1,8 @@
 package com.aventstack.extentreports.cucumber.adapter;
 
 import io.cucumber.core.exception.CucumberException;
-import io.cucumber.core.gherkin.vintage.internal.gherkin.*;
-import io.cucumber.core.gherkin.vintage.internal.gherkin.ast.*;
+import io.cucumber.core.internal.gherkin.*;
+import io.cucumber.core.internal.gherkin.ast.*;
 import io.cucumber.plugin.event.TestSourceRead;
 
 import java.io.File;

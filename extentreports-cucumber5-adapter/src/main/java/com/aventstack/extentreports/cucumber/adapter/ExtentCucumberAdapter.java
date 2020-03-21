@@ -20,12 +20,16 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.gherkin.model.Asterisk;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.aventstack.extentreports.model.service.LogService;
+import com.aventstack.extentreports.model.service.TestService;
 import com.aventstack.extentreports.service.ExtentService;
 
 
 import io.cucumber.core.exception.CucumberException;
-import io.cucumber.core.gherkin.vintage.internal.gherkin.ast.*;
-import io.cucumber.core.gherkin.vintage.internal.gherkin.pickles.*;
+import io.cucumber.core.internal.gherkin.ast.*;
+import io.cucumber.core.internal.gherkin.pickles.*;
+/*import io.cucumber.core.gherkin.vintage.internal.gherkin.ast.*;
+import io.cucumber.core.gherkin.vintage.internal.gherkin.pickles.*;*/
 import io.cucumber.plugin.ConcurrentEventListener;
 import io.cucumber.plugin.event.EmbedEvent;
 import io.cucumber.plugin.event.EventHandler;
@@ -50,6 +54,7 @@ import io.cucumber.plugin.event.WriteEvent;
 public class ExtentCucumberAdapter implements ConcurrentEventListener {
 
     private static final String SCREENSHOT_DIR_PROPERTY = "screenshot.dir";
+    private static final String SCREENSHOT_REL_PATH_PROPERTY = "screenshot.rel.path";
     
     private static Map<String, ExtentTest> featureMap = new ConcurrentHashMap<>();
     private static ThreadLocal<ExtentTest> featureTestThreadLocal = new InheritableThreadLocal<>();
@@ -58,6 +63,9 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
     private static ThreadLocal<ExtentTest> scenarioThreadLocal = new InheritableThreadLocal<>();
     private static ThreadLocal<Boolean> isHookThreadLocal = new InheritableThreadLocal<>();
     private static ThreadLocal<ExtentTest> stepTestThreadLocal = new InheritableThreadLocal<>();
+    
+    private String screenshotDir;
+    private String screenshotRelPath;
     
     @SuppressWarnings("serial")
     private static final Map<String, String> MIME_TYPES_EXTENSIONS = new HashMap<String, String>() {
@@ -122,7 +130,14 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
         }
     };
 
-    public ExtentCucumberAdapter(String arg) { }
+    public ExtentCucumberAdapter(String arg) {
+    	ExtentService.getInstance();
+    	Object prop = ExtentService.getProperty(SCREENSHOT_DIR_PROPERTY);
+        screenshotDir = prop == null ? "test-output/" : String.valueOf(prop);
+        prop = ExtentService.getProperty(SCREENSHOT_REL_PATH_PROPERTY);
+        screenshotRelPath = prop == null || String.valueOf(prop).isEmpty() ? screenshotDir : String.valueOf(prop);
+        screenshotRelPath = screenshotRelPath == null ? "" : screenshotRelPath;
+    }
 
     @Override
     public void setEventPublisher(EventPublisher publisher) {
@@ -190,7 +205,8 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
                 if (stepTestThreadLocal.get()!= null && stepTestThreadLocal.get().getModel().getLogContext().isEmpty()) {
                     stepTestThreadLocal.get().pass("");
                 }
-                if (isHookThreadLocal.get() && !stepTestThreadLocal.get().getModel().hasLog() && !stepTestThreadLocal.get().getModel().getLogContext().getFirst().hasScreenCapture()) {
+                //if (isHookThreadLocal.get() && !stepTestThreadLocal.get().getModel().hasLog() && !stepTestThreadLocal.get().getModel().getLogContext().getFirst().hasScreenCapture()) {
+                if (isHookThreadLocal.get() && !TestService.testHasLog(stepTestThreadLocal.get().getModel()) && !LogService.logHasScreenCapture(stepTestThreadLocal.get().getModel().getLogContext().getFirst())) {
                     ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
                 }
                 break;
@@ -200,7 +216,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
     }
 
     private synchronized void handleEmbed(EmbedEvent event) {
-        String mimeType = event.getMimeType();
+        String mimeType = event.getMediaType();
         String extension = MIME_TYPES_EXTENSIONS.get(mimeType);
         if (extension != null) {
             StringBuilder fileName = new StringBuilder("embedded").append(EMBEDDED_INT.incrementAndGet()).append(".").append(extension);
@@ -238,8 +254,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
     
     private URL toUrl(String fileName) {
         try {
-            Object prop = ExtentService.getProperty(SCREENSHOT_DIR_PROPERTY);
-            String screenshotDir = prop == null ? "test-output/" : String.valueOf(prop); 
             URL url = Paths.get(screenshotDir, fileName).toUri().toURL();
             return url;
         } catch (IOException e) {
@@ -392,8 +406,8 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
     }
 
     private synchronized void createTestStep(PickleStepTestStep testStep) {
-        String stepName = testStep.getStepText();
-        TestSourcesModel.AstNode astNode = testSources.getAstNode(currentFeatureFile.get(), testStep.getStepLine());
+        String stepName = testStep.getStep().getText();
+        TestSourcesModel.AstNode astNode = testSources.getAstNode(currentFeatureFile.get(), testStep.getStep().getLine());
         if (astNode != null) {
             Step step = (Step) astNode.node;
             try {
@@ -407,7 +421,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
                 e.printStackTrace();
             }
         }
-        StepArgument argument = testStep.getStepArgument();
+        StepArgument argument = testStep.getStep().getArgument();
         if (argument != null) {
             if (argument instanceof PickleString) {
                 createDocStringMap((PickleString)argument);
@@ -439,6 +453,24 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
         Map<String, Object> docStringMap = new HashMap<String, Object>();
         docStringMap.put("value", docString.getContent());
         return docStringMap;
+    }
+    
+    // the below additions are from PR #33
+    // https://github.com/extent-framework/extentreports-cucumber4-adapter/pull/33
+    public static synchronized void addTestStepLog(String message) {
+        stepTestThreadLocal.get().info(message);
+    }
+	
+    public static synchronized void addTestStepScreenCaptureFromPath(String imagePath) throws IOException {
+	    stepTestThreadLocal.get().addScreenCaptureFromPath(imagePath);
+    }
+	
+    public static synchronized void addTestStepScreenCaptureFromPath(String imagePath, String title) throws IOException {
+	    stepTestThreadLocal.get().addScreenCaptureFromPath(imagePath, title);
+    }
+    
+    public static ExtentTest getCurrentStep() {
+    	return stepTestThreadLocal.get();
     }
 
 }

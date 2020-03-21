@@ -7,7 +7,7 @@ import io.cucumber.java.en.*;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 public class RpnCalculatorStepdefs {
     private RpnCalculator calc;
