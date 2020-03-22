@@ -23,6 +23,12 @@ Feature: Basic Arithmetic
     And I add <a> and <b>
     And I press "+"
     Then the result is <c>
+    And the doc string is
+      """
+      Hello there how r u?
+      
+      Doing great.
+      """
 
   Examples: Single digits
     | a | b | c  |

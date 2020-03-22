@@ -1,13 +1,17 @@
 package cucumber.examples.java.calculator;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
-import io.cucumber.java.en.*;
+import static org.testng.Assert.assertEquals;
 
 import java.util.List;
+import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.DataTableType;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class RpnCalculatorStepdefs {
     private RpnCalculator calc;
@@ -36,13 +40,20 @@ public class RpnCalculatorStepdefs {
 
     @Before("not @foo")
     public void before(Scenario scenario) {
-        scenario.write("Runs before scenarios *not* tagged with @foo");
+        scenario.write("Runs BEFORE scenarios *not* tagged with @foo");
     }
 
-    @After
+    @After("not @foo")
     public void after(Scenario scenario) {
-        // result.write("HELLLLOO");
+    	scenario.write("Runs AFTER scenarios *not* tagged with @foo");
     }
+    
+    @DataTableType
+	public Entry getEntries(Map<String, String> entry) {
+		return new Entry(Integer.valueOf(entry.get("first")),
+                Integer.valueOf(entry.get("second")),
+                entry.get("operation"));
+	}
 
     @Given("the previous entries:")
     public void thePreviousEntries(List<Entry> entries) {
