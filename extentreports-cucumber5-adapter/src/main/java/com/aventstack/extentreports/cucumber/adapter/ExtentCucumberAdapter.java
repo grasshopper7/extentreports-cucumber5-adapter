@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.GherkinKeyword;
@@ -193,6 +194,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 		case "failed":
 			stepTestThreadLocal.get().fail(result.getError());
 			break;
+		case "undefined":
 		case "skipped":
 		case "pending":
 			Boolean currentEndingEventSkipped = stepTestThreadLocal.get().getModel().getLogContext() != null
@@ -207,12 +209,18 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 			}
 			break;
 		case "passed":
-			if (stepTestThreadLocal.get() != null && stepTestThreadLocal.get().getModel().getLogContext().isEmpty()) {
+			if (stepTestThreadLocal.get() != null && stepTestThreadLocal.get().getModel().getLogContext().isEmpty()
+					&& !isHookThreadLocal.get()) {
 				stepTestThreadLocal.get().pass("");
 			}
-			if (isHookThreadLocal.get() && !TestService.testHasLog(stepTestThreadLocal.get().getModel()) && !LogService
-					.logHasScreenCapture(stepTestThreadLocal.get().getModel().getLogContext().getFirst())) {
-				ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+
+			if (stepTestThreadLocal.get() != null) {
+				Boolean hasLog = TestService.testHasLog(stepTestThreadLocal.get().getModel());
+				Boolean hasScreenCapture = hasLog && LogService
+						.logHasScreenCapture(stepTestThreadLocal.get().getModel().getLogContext().getFirst());
+				if (isHookThreadLocal.get() && !hasLog && !hasScreenCapture) {
+					ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+				}
 			}
 			break;
 		default:
@@ -354,8 +362,20 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 					scenarioOutline.getDescription());
 			scenarioOutlineThreadLocal.set(t);
 			scenarioOutlineMap.put(scenarioOutline.getName(), t);
-			List<String> tags = createTagsList(scenarioOutline.getTags());
-			tags.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
+			/*
+			 * List<String> tags = createTagsList(scenarioOutline.getTags());
+			 * tags.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
+			 */
+			List<String> featureTags = scenarioOutlineThreadLocal.get().getModel()
+            		.getParent().getCategoryContext().getAll()
+            		.stream()
+            		.map(x -> x.getName())
+            		.collect(Collectors.toList());
+            scenarioOutline.getTags()
+            	.stream()
+            	.map(x -> x.getName())
+            	.filter(x -> !featureTags.contains(x))
+            	.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
 		}
 	}
 
