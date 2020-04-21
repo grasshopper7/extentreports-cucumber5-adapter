@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 (2020-04-22)
+* Added support for strict=true option [Issue 3](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/3)
+
 ## 1.1.0 (2020-04-21)
 
 * Updated extentreports version to 4.1.5

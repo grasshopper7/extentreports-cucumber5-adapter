@@ -38,6 +38,7 @@ import io.cucumber.core.internal.gherkin.ast.TableCell;
 import io.cucumber.core.internal.gherkin.ast.TableRow;
 import io.cucumber.core.internal.gherkin.ast.Tag;
 import io.cucumber.plugin.ConcurrentEventListener;
+import io.cucumber.plugin.StrictAware;
 import io.cucumber.plugin.event.DataTableArgument;
 import io.cucumber.plugin.event.DocStringArgument;
 import io.cucumber.plugin.event.EmbedEvent;
@@ -61,7 +62,7 @@ import io.cucumber.plugin.event.WriteEvent;
  * https://github.com/cucumber/cucumber-jvm/blob/master/core/src/main/java/cucumber/runtime/formatter/HTMLFormatter.java
  *
  */
-public class ExtentCucumberAdapter implements ConcurrentEventListener {
+public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAware {
 
 	private static final String SCREENSHOT_DIR_PROPERTY = "screenshot.dir";
 	private static final String SCREENSHOT_REL_PATH_PROPERTY = "screenshot.rel.path";
@@ -76,6 +77,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 
 	private String screenshotDir;
 	private String screenshotRelPath;
+	private boolean strict = false;
 
 	@SuppressWarnings("serial")
 	private static final Map<String, String> MIME_TYPES_EXTENSIONS = new HashMap<String, String>() {
@@ -159,6 +161,11 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 		publisher.registerHandlerFor(WriteEvent.class, writeEventhandler);
 		publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
 	}
+	
+	@Override
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
 
 	private void handleTestSourceRead(TestSourceRead event) {
 		testSources.addTestSourceReadEvent(event.getUri(), event);
@@ -195,8 +202,18 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 			stepTestThreadLocal.get().fail(result.getError());
 			break;
 		case "undefined":
-		case "skipped":
+			if (strict) {
+        		stepTestThreadLocal.get().fail("Step undefined");
+        		break;
+        	}
+        	stepTestThreadLocal.get().skip("Step undefined");
+        	break;
 		case "pending":
+		case "skipped":
+			if (isHookThreadLocal.get()) {
+        		ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+        		break;
+        	}
 			Boolean currentEndingEventSkipped = stepTestThreadLocal.get().getModel().getLogContext() != null
 					&& !stepTestThreadLocal.get().getModel().getLogContext().isEmpty()
 							? stepTestThreadLocal.get().getModel().getLogContext().getLast().getStatus() == Status.SKIP
@@ -245,6 +262,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener {
 					}
 					stepTestThreadLocal.get().info("",
 							MediaEntityBuilder.createScreenCaptureFromPath(f.getAbsolutePath()).build());
+					//Screen shot for html report.
 					stepTestThreadLocal.get().addScreenCaptureFromPath(url.getPath());
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
