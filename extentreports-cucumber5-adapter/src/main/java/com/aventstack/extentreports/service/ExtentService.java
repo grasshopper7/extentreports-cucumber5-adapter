@@ -47,6 +47,8 @@ public class ExtentService
                 "extent.properties",
                 "com/aventstack/adapter/extent.properties"
         };
+        
+        private static final String SYS_INFO_MARKER = "systeminfo.";
         private static final String OUTPUT_PATH = "test-output/";
         private static final String EXTENT_REPORTER = "extent.reporter";
         private static final String START = "start";
@@ -138,6 +140,8 @@ public class ExtentService
                     
                     if (properties.containsKey(INIT_TABULAR_KEY) && "true".equals(String.valueOf(properties.get(INIT_TABULAR_KEY))))
                         initTabular(properties);
+                    
+                    addSystemInfo(properties);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -171,6 +175,8 @@ public class ExtentService
             
             if ("true".equals(System.getProperty(INIT_TABULAR_KEY)))
                 initTabular(null);
+            
+            addSystemInfo(System.getProperties());
         }
         
         private static void initAvent(Properties properties) {
@@ -253,6 +259,15 @@ public class ExtentService
                 r.loadXMLConfig(String.valueOf(configPath));
             INSTANCE.attachReporter(( r));
         }
-    }
-    
+        
+        private static void addSystemInfo(Properties properties) {
+        	properties.forEach((k,v) -> {
+        		String key = k.toString();
+        		if(key.startsWith(SYS_INFO_MARKER)) {
+        			key = key.substring(key.indexOf('.')+1);
+        			INSTANCE.setSystemInfo(key, v.toString());
+        		}
+        	});
+		}
+    }    
 }
