@@ -1,11 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.3.0 (In process)
+## 1.3.0 (2020-05-12)
+
 * Support for reading system info from extent.properties & maven cmd [Issue 4](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/4)
 
-
 ## 1.2.0 (2020-04-22)
+
 * Added support for strict=true option [Issue 3](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/3)
 
 ## 1.1.0 (2020-04-21)
