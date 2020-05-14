@@ -257,15 +257,15 @@ public class ExtentService
                     : properties.get(configKey);
             if (configPath != null && !String.valueOf(configPath).isEmpty())
                 r.loadXMLConfig(String.valueOf(configPath));
-            INSTANCE.attachReporter(( r));
+            INSTANCE.attachReporter(r);
         }
         
         private static void addSystemInfo(Properties properties) {
         	properties.forEach((k,v) -> {
-        		String key = k.toString();
+        		String key = String.valueOf(k);
         		if(key.startsWith(SYS_INFO_MARKER)) {
         			key = key.substring(key.indexOf('.')+1);
-        			INSTANCE.setSystemInfo(key, v.toString());
+        			INSTANCE.setSystemInfo(key, String.valueOf(v));
         		}
         	});
 		}
