@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.1 (2020-05-14)
+
+* Minor bug fix used String.value
+
 ## 1.3.0 (2020-05-12)
 
 * Support for reading system info from extent.properties & maven cmd [Issue 4](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/4)
