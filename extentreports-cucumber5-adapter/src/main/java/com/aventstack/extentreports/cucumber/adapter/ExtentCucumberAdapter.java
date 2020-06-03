@@ -261,9 +261,9 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 						stepTestThreadLocal.set(t);
 					}
 					stepTestThreadLocal.get().info("",
-							MediaEntityBuilder.createScreenCaptureFromPath(f.getAbsolutePath()).build());
+							MediaEntityBuilder.createScreenCaptureFromPath(screenshotRelPath + f.getName()).build());
 					//Screen shot for html report.
-					stepTestThreadLocal.get().addScreenCaptureFromPath(url.getPath());
+					stepTestThreadLocal.get().addScreenCaptureFromPath(screenshotRelPath + f.getName());
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}

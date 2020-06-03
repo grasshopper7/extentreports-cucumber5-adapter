@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.2 (2020-06-03)
+
+* Bug fix for missing screenshot 
+
 ## 1.3.1 (2020-05-14)
 
 * Minor bug fix used String.value
