@@ -21,16 +21,12 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.gherkin.model.Asterisk;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
-import com.aventstack.extentreports.model.service.LogService;
-import com.aventstack.extentreports.model.service.TestService;
+import com.aventstack.extentreports.model.Test;
 import com.aventstack.extentreports.service.ExtentService;
 
 import io.cucumber.core.exception.CucumberException;
-import io.cucumber.core.internal.gherkin.ast.DataTable;
-import io.cucumber.core.internal.gherkin.ast.DocString;
 import io.cucumber.core.internal.gherkin.ast.Examples;
 import io.cucumber.core.internal.gherkin.ast.Feature;
-import io.cucumber.core.internal.gherkin.ast.Node;
 import io.cucumber.core.internal.gherkin.ast.ScenarioDefinition;
 import io.cucumber.core.internal.gherkin.ast.ScenarioOutline;
 import io.cucumber.core.internal.gherkin.ast.Step;
@@ -197,52 +193,46 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 	}
 
 	private synchronized void updateResult(Result result) {
-		switch (result.getStatus().name().toLowerCase()) {
-		case "failed":
-			stepTestThreadLocal.get().fail(result.getError());
-			break;
-		case "undefined":
-			if (strict) {
-        		stepTestThreadLocal.get().fail("Step undefined");
-        		break;
-        	}
-        	stepTestThreadLocal.get().skip("Step undefined");
-        	break;
-		case "pending":
-		case "skipped":
-			if (isHookThreadLocal.get()) {
-        		ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
-        		break;
-        	}
-			Boolean currentEndingEventSkipped = stepTestThreadLocal.get().getModel().getLogContext() != null
-					&& !stepTestThreadLocal.get().getModel().getLogContext().isEmpty()
-							? stepTestThreadLocal.get().getModel().getLogContext().getLast().getStatus() == Status.SKIP
-							: false;
-			if (result.getError() != null) {
-				stepTestThreadLocal.get().skip(result.getError());
-			} else if (!currentEndingEventSkipped) {
-				String details = result.getError() == null ? "Step skipped" : result.getError().getMessage();
-				stepTestThreadLocal.get().skip(details);
-			}
-			break;
-		case "passed":
-			if (stepTestThreadLocal.get() != null && stepTestThreadLocal.get().getModel().getLogContext().isEmpty()
-					&& !isHookThreadLocal.get()) {
-				stepTestThreadLocal.get().pass("");
-			}
-
-			if (stepTestThreadLocal.get() != null) {
-				Boolean hasLog = TestService.testHasLog(stepTestThreadLocal.get().getModel());
-				Boolean hasScreenCapture = hasLog && LogService
-						.logHasScreenCapture(stepTestThreadLocal.get().getModel().getLogContext().getFirst());
-				if (isHookThreadLocal.get() && !hasLog && !hasScreenCapture) {
-					ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
-				}
-			}
-			break;
-		default:
-			break;
-		}
+		Test test = stepTestThreadLocal.get().getModel();
+        switch (result.getStatus().name().toLowerCase()) {
+            case "failed" :
+                stepTestThreadLocal.get().fail(result.getError());
+                break;
+            case "undefined" :
+                if (strict) {
+                    stepTestThreadLocal.get().fail("Step undefined");
+                    break;
+                }
+                stepTestThreadLocal.get().skip("Step undefined");
+                break;
+            case "pending" :
+            case "skipped" :
+                if (isHookThreadLocal.get()) {
+                    ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+                    break;
+                }
+                boolean currentEndingEventSkipped = test.hasLog()
+                        ? test.getLogs().get(test.getLogs().size() - 1).getStatus() == Status.SKIP
+                        : false;
+                if (result.getError() != null) {
+                    stepTestThreadLocal.get().skip(result.getError());
+                } else if (!currentEndingEventSkipped) {
+                    String details = result.getError() == null ? "Step skipped" : result.getError().getMessage();
+                    stepTestThreadLocal.get().skip(details);
+                }
+                break;
+            case "passed" :
+                if (stepTestThreadLocal.get() != null && !test.hasLog() && !isHookThreadLocal.get())
+                    stepTestThreadLocal.get().pass("");
+                if (stepTestThreadLocal.get() != null) {
+                    Boolean hasScreenCapture = test.hasLog() && test.getLogs().get(0).hasMedia();
+                    if (isHookThreadLocal.get() && !test.hasLog() && !hasScreenCapture)
+                        ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+                }
+                break;
+            default :
+                break;
+        }
 	}
 
 	private synchronized void handleEmbed(EmbedEvent event) {
@@ -385,7 +375,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			 * tags.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
 			 */
 			List<String> featureTags = scenarioOutlineThreadLocal.get().getModel()
-            		.getParent().getCategoryContext().getAll()
+            		.getParent().getCategorySet()
             		.stream()
             		.map(x -> x.getName())
             		.collect(Collectors.toList());
@@ -395,25 +385,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
             	.filter(x -> !featureTags.contains(x))
             	.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
 		}
-	}
-
-	private synchronized void addOutlineStepsToReport(ScenarioOutline scenarioOutline) {
-		for (Step step : scenarioOutline.getSteps()) {
-			if (step.getArgument() != null) {
-				Node argument = step.getArgument();
-				if (argument instanceof DocString) {
-					createDocStringMap((DocString) argument);
-				} else if (argument instanceof DataTable) {
-
-				}
-			}
-		}
-	}
-
-	private Map<String, Object> createDocStringMap(DocString docString) {
-		Map<String, Object> docStringMap = new HashMap<String, Object>();
-		docStringMap.put("value", docString.getContent());
-		return docStringMap;
 	}
 
 	private void createExamples(Examples examples) {
@@ -481,8 +452,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		StepArgument argument = testStep.getStep().getArgument();
 		if (argument != null) {
 			if (argument instanceof DocStringArgument) {
-				// createDocStringMap((DocStringArgument)argument);
-				stepTestThreadLocal.get().pass(createDocString((DocStringArgument) argument));
+				stepTestThreadLocal.get().pass(MarkupHelper.createCodeBlock(((DocStringArgument) argument).getContent()));
 			} else if (argument instanceof DataTableArgument) {
 				stepTestThreadLocal.get()
 						.pass(MarkupHelper.createTable(createDataTableList((DataTableArgument) argument)).getMarkup());
@@ -501,10 +471,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 				data[i][j] = cells.get(i).get(j);
 		}
 		return data;
-	}
-
-	private String createDocString(DocStringArgument docString) {
-		return docString.getContent().replaceAll("(\r\n|\n)", "<br />");
 	}
 
 	// the below additions are from PR #33
