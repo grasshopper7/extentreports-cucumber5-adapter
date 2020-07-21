@@ -4,7 +4,7 @@ Feature: Basic Arithmetic
   Background: A Calculator
     Given a calculator I just turned on
 
-  Scenario: Addition Scenario hehe
+  Scenario: Addition Scenario
   # Try to change one of the values below to provoke a failure
     When I add 4 and 5
     Then the result is 9
@@ -23,12 +23,6 @@ Feature: Basic Arithmetic
     And I add <a> and <b>
     And I press "+"
     Then the result is <c>
-    And the doc string is
-      """
-      Hello there how r u?
-      
-      Doing great.
-      """
 
   Examples: Single digits
     | a | b | c  |
