@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.0 (2020-07-21)
+
+* Support for Json formatter [Issue 7](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/7)
+* Fixed docstring display [Issue 8](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/8)
+
 ## 1.3.2 (2020-06-03)
 
 * Bug fix for missing screenshot 
