@@ -5,7 +5,7 @@
 
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extentreports-cucumber5-adapter</artifactId>
-	<version>1.3.3</version>
+	<version>1.4.0</version>
 	<name>extentreports-cucumber5-adapter</name>
 	<url>https://grasshopper.tech/1697/</url>
 	<description>Cucumber-JVM 5 adapter for Extent Framework</description>
@@ -30,6 +30,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cucumber.version>5.7.0</cucumber.version>
+		<extent.version>4.1.7</extent.version>
 	</properties>
 
 	<scm>
@@ -42,7 +43,7 @@
 		<dependency>
 			<groupId>com.aventstack</groupId>
 			<artifactId>extentreports</artifactId>
-			<version>4.1.7</version>
+			<version>${extent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.cucumber</groupId>
