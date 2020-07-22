@@ -66,7 +66,6 @@ public class ExtentService implements Serializable {
 		private static final String OUT_JSONF_KEY = EXTENT_REPORTER + DELIM + JSONF + DELIM + OUT;
 
 		static {
-			// TODO Check for any reporters attached
 			createViaProperties();
 			createViaSystem();
 		}

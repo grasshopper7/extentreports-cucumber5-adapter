@@ -370,10 +370,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 					scenarioOutline.getDescription());
 			scenarioOutlineThreadLocal.set(t);
 			scenarioOutlineMap.put(scenarioOutline.getName(), t);
-			/*
-			 * List<String> tags = createTagsList(scenarioOutline.getTags());
-			 * tags.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
-			 */
+
 			List<String> featureTags = scenarioOutlineThreadLocal.get().getModel()
             		.getParent().getCategorySet()
             		.stream()
