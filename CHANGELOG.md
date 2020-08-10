@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 (2020-08-10)
+
+* Add date and time to report folders [Issue 12](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/12)
+* Fix report folder name issue [Issue 13](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/13)
+
 ## 1.4.0 (2020-07-21)
 
 * Support for Json formatter [Issue 7](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/7)

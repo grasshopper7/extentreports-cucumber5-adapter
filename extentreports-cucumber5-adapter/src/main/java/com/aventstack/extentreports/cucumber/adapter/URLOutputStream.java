@@ -28,17 +28,18 @@ class URLOutputStream extends OutputStream {
 	private final OutputStream out;
 	private final HttpURLConnection urlConnection;
 
-	URLOutputStream(URL url) throws IOException {
+	URLOutputStream(URL url) throws Exception {
 		this(url, "PUT", Collections.emptyMap(), 200);
 	}
 
 	private URLOutputStream(URL url, String method, Map<String, String> headers, int expectedResponseCode)
-			throws IOException {
+			throws Exception {
 		this.url = url;
 		this.method = method;
 		this.expectedResponseCode = expectedResponseCode;
 		if (url.getProtocol().equals("file")) {
-			File file = new File(url.getFile());
+			//File file = new File(url.getFile());
+			File file = new File(url.toURI().getPath());
 			ensureParentDirExists(file);
 			out = new FileOutputStream(file);
 			urlConnection = null;

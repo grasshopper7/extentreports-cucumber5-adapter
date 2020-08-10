@@ -61,9 +61,6 @@ import io.cucumber.plugin.event.WriteEvent;
  */
 public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAware {
 
-	private static final String SCREENSHOT_DIR_PROPERTY = "screenshot.dir";
-	private static final String SCREENSHOT_REL_PATH_PROPERTY = "screenshot.rel.path";
-
 	private static Map<String, ExtentTest> featureMap = new ConcurrentHashMap<>();
 	private static ThreadLocal<ExtentTest> featureTestThreadLocal = new InheritableThreadLocal<>();
 	private static Map<String, ExtentTest> scenarioOutlineMap = new ConcurrentHashMap<>();
@@ -72,8 +69,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 	private static ThreadLocal<Boolean> isHookThreadLocal = new InheritableThreadLocal<>();
 	private static ThreadLocal<ExtentTest> stepTestThreadLocal = new InheritableThreadLocal<>();
 
-	private String screenshotDir;
-	private String screenshotRelPath;
 	private boolean strict = false;
 
 	@SuppressWarnings("serial")
@@ -141,11 +136,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 
 	public ExtentCucumberAdapter(String arg) {
 		ExtentService.getInstance();
-		Object prop = ExtentService.getProperty(SCREENSHOT_DIR_PROPERTY);
-		screenshotDir = prop == null ? "test-output/" : String.valueOf(prop);
-		prop = ExtentService.getProperty(SCREENSHOT_REL_PATH_PROPERTY);
-		screenshotRelPath = prop == null || String.valueOf(prop).isEmpty() ? screenshotDir : String.valueOf(prop);
-		screenshotRelPath = screenshotRelPath == null ? "" : screenshotRelPath;
 	}
 
 	@Override
@@ -158,11 +148,11 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		publisher.registerHandlerFor(WriteEvent.class, writeEventhandler);
 		publisher.registerHandlerFor(TestRunFinished.class, runFinishedHandler);
 	}
-	
+
 	@Override
-    public void setStrict(boolean strict) {
-        this.strict = strict;
-    }
+	public void setStrict(boolean strict) {
+		this.strict = strict;
+	}
 
 	private void handleTestSourceRead(TestSourceRead event) {
 		testSources.addTestSourceReadEvent(event.getUri(), event);
@@ -200,17 +190,17 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			break;
 		case "undefined":
 			if (strict) {
-        		stepTestThreadLocal.get().fail("Step undefined");
-        		break;
-        	}
-        	stepTestThreadLocal.get().skip("Step undefined");
-        	break;
+				stepTestThreadLocal.get().fail("Step undefined");
+				break;
+			}
+			stepTestThreadLocal.get().skip("Step undefined");
+			break;
 		case "pending":
 		case "skipped":
 			if (isHookThreadLocal.get()) {
-        		ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
-        		break;
-        	}
+				ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
+				break;
+			}
 			Boolean currentEndingEventSkipped = stepTestThreadLocal.get().getModel().getLogContext() != null
 					&& !stepTestThreadLocal.get().getModel().getLogContext().isEmpty()
 							? stepTestThreadLocal.get().getModel().getLogContext().getLast().getStatus() == Status.SKIP
@@ -257,10 +247,12 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 						ExtentTest t = scenarioThreadLocal.get().createNode(Asterisk.class, "Embed");
 						stepTestThreadLocal.set(t);
 					}
-					stepTestThreadLocal.get().info("",
-							MediaEntityBuilder.createScreenCaptureFromPath(screenshotRelPath + f.getName()).build());
-					//Screen shot for html report.
-					stepTestThreadLocal.get().addScreenCaptureFromPath(screenshotRelPath + f.getName());
+					stepTestThreadLocal.get().info("", MediaEntityBuilder
+							.createScreenCaptureFromPath(ExtentService.getScreenshotReportRelatvePath() + f.getName())
+							.build());
+					// Screen shot for html report.
+					stepTestThreadLocal.get()
+							.addScreenCaptureFromPath(ExtentService.getScreenshotReportRelatvePath() + f.getName());
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
@@ -282,14 +274,14 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 	private static OutputStream createReportFileOutputStream(URL url) {
 		try {
 			return new URLOutputStream(url);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new CucumberException(e);
 		}
 	}
 
 	private URL toUrl(String fileName) {
 		try {
-			URL url = Paths.get(screenshotDir, fileName).toUri().toURL();
+			URL url = Paths.get(ExtentService.getScreenshotFolderName(), fileName).toUri().toURL();
 			return url;
 		} catch (IOException e) {
 			throw new CucumberException(e);
@@ -377,16 +369,10 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			scenarioOutlineThreadLocal.set(t);
 			scenarioOutlineMap.put(scenarioOutline.getName(), t);
 
-			List<String> featureTags = scenarioOutlineThreadLocal.get().getModel()
-            		.getParent().getCategoryContext().getAll()
-            		.stream()
-            		.map(x -> x.getName())
-            		.collect(Collectors.toList());
-            scenarioOutline.getTags()
-            	.stream()
-            	.map(x -> x.getName())
-            	.filter(x -> !featureTags.contains(x))
-            	.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
+			List<String> featureTags = scenarioOutlineThreadLocal.get().getModel().getParent().getCategoryContext()
+					.getAll().stream().map(x -> x.getName()).collect(Collectors.toList());
+			scenarioOutline.getTags().stream().map(x -> x.getName()).filter(x -> !featureTags.contains(x))
+					.forEach(scenarioOutlineThreadLocal.get()::assignCategory);
 		}
 	}
 
@@ -455,7 +441,8 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		StepArgument argument = testStep.getStep().getArgument();
 		if (argument != null) {
 			if (argument instanceof DocStringArgument) {
-				stepTestThreadLocal.get().pass(MarkupHelper.createCodeBlock(((DocStringArgument) argument).getContent()));
+				stepTestThreadLocal.get()
+						.pass(MarkupHelper.createCodeBlock(((DocStringArgument) argument).getContent()));
 			} else if (argument instanceof DataTableArgument) {
 				stepTestThreadLocal.get()
 						.pass(MarkupHelper.createTable(createDataTableList((DataTableArgument) argument)).getMarkup());
@@ -475,7 +462,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		}
 		return data;
 	}
-	
+
 	// the below additions are from PR #33
 	// https://github.com/extent-framework/extentreports-cucumber4-adapter/pull/33
 	public static synchronized void addTestStepLog(String message) {
