@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 (2020-08-11)
+
+* Refactor exception to fine grained in URLOutputSteam [Issue 14](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/14)
+
 ## 1.5.0 (2020-08-10)
 
 * Add date and time to report folders [Issue 12](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/12)

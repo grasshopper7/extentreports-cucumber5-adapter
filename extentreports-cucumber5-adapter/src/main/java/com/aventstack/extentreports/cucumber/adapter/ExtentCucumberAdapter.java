@@ -274,7 +274,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 	private static OutputStream createReportFileOutputStream(URL url) {
 		try {
 			return new URLOutputStream(url);
-		} catch (Exception e) {
+		} catch (IOException | URISyntaxException e) {
 			throw new CucumberException(e);
 		}
 	}
