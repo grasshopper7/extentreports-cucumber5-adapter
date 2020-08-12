@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.5.0 (2020-08-11)
+## 1.5.1 (2020-08-11)
 
 * Refactor exception to fine grained in URLOutputSteam [Issue 14](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/14)
 
