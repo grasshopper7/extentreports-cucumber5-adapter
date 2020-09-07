@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.0.0 (2020-09-06)
+
+* Upgrade adapter to support extent version 5 [Issue 11](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/11)]
+
 ## 1.5.1 (2020-08-11)
 
 * Refactor exception to fine grained in URLOutputSteam [Issue 14](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/14)

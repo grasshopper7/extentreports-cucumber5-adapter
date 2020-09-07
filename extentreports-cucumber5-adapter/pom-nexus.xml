@@ -5,7 +5,7 @@
 
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>extentreports-cucumber5-adapter</artifactId>
-	<version>1.5.1</version>
+	<version>2.0.0</version>
 	<name>extentreports-cucumber5-adapter</name>
 	<url>https://grasshopper.tech/1697/</url>
 	<description>Cucumber-JVM 5 adapter for Extent Framework</description>
@@ -30,7 +30,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cucumber.version>5.7.0</cucumber.version>
-		<extent.version>4.1.7</extent.version>
+		<extent.version>5.0.1</extent.version>
 	</properties>
 
 	<scm>
@@ -43,6 +43,11 @@
 		<dependency>
 			<groupId>com.aventstack</groupId>
 			<artifactId>extentreports</artifactId>
+			<version>${extent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aventstack</groupId>
+			<artifactId>klov-reporter</artifactId>
 			<version>${extent.version}</version>
 		</dependency>
 		<dependency>
@@ -87,7 +92,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
