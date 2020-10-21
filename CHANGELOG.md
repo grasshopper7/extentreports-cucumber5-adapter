@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.1.0 (2020-10-21)
+
+* Option to customize opening tab of spark report [Issue 21](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/21)]
+* Add support for pdf reporter [Issue 20](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/20)]
+* Ability to determine hook type [Issue 19](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/19)]
+* Add support for parametrized scenario outline names [Issue 18](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/18)]
+
 ## 2.0.0 (2020-09-06)
 
 * Upgrade adapter to support extent version 5 [Issue 11](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/11)]

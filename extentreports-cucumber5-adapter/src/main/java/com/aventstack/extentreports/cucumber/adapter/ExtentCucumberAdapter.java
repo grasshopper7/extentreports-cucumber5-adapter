@@ -167,7 +167,8 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		isHookThreadLocal.set(false);
 
 		if (event.getTestStep() instanceof HookTestStep) {
-			ExtentTest t = scenarioThreadLocal.get().createNode(Asterisk.class, event.getTestStep().getCodeLocation());
+			ExtentTest t = scenarioThreadLocal.get().createNode(Asterisk.class, event.getTestStep().getCodeLocation(),
+					(((HookTestStep) event.getTestStep()).getHookType()).toString().toUpperCase());
 			stepTestThreadLocal.set(t);
 			isHookThreadLocal.set(true);
 		}
@@ -406,7 +407,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			ExtentTest parent = scenarioOutlineThreadLocal.get() != null ? scenarioOutlineThreadLocal.get()
 					: featureTestThreadLocal.get();
 			ExtentTest t = parent.createNode(com.aventstack.extentreports.gherkin.model.Scenario.class,
-					scenarioDefinition.getName(), scenarioDefinition.getDescription());
+					testCase.getName(), scenarioDefinition.getDescription());
 			scenarioThreadLocal.set(t);
 		}
 		if (!testCase.getTags().isEmpty()) {
