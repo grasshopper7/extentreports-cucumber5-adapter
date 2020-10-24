@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2.2.0 (2020-10-24)
+## 2.3.0 (2020-10-24)
 
 * "Passed" Step duration not correct when multiple logs are attached [Issue 22](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/22)]
 
