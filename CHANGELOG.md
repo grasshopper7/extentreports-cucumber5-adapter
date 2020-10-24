@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.2.0 (2020-10-24)
+
+* "Passed" Step duration not correct when multiple logs are attached [Issue 22](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/22)]
+
 ## 2.1.0 (2020-10-21)
 
 * Option to customize opening tab of spark report [Issue 21](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/21)]
