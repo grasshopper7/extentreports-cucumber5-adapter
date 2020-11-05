@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.4.0 (2020-11-05)
+
+* Klov reporter initialization fails with NPE [Issue 24](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/24)]
+* Parallel execution does not work for junit runner [Issue 23](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/23)]
+* Fail pending step in strict mode [Issue 17](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/17)]
+* Upgrade pdf reporter version
+
 ## 2.3.0 (2020-10-24)
 
 * "Passed" Step duration not correct when multiple logs are attached [Issue 22](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/22)]
