@@ -197,6 +197,10 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			stepTestThreadLocal.get().skip("Step undefined");
 			break;
 		case "pending":
+			if (strict) {
+				stepTestThreadLocal.get().fail("Step pending");
+				break;
+			}
 		case "skipped":
 			if (isHookThreadLocal.get()) {
 				ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
@@ -246,9 +250,6 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 					stepTestThreadLocal.get().info("", MediaEntityBuilder
 							.createScreenCaptureFromPath(ExtentService.getScreenshotReportRelatvePath() + f.getName())
 							.build());
-					// Screen shot for html report.
-					stepTestThreadLocal.get()
-							.addScreenCaptureFromPath(ExtentService.getScreenshotReportRelatvePath() + f.getName());
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
