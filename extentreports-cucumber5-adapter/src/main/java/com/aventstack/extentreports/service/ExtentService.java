@@ -198,6 +198,7 @@ public class ExtentService implements Serializable {
 			if (configPath != null && !configPath.isEmpty() && f.exists()) {
 				// Object prop = ExtentService.getProperty("screenshot.dir");
 				// String screenshotDir = prop == null ? "test-output/" : String.valueOf(prop);
+				configureScreenshotProperties();
 				String url = Paths.get(SCREENSHOT_FOLDER_NAME).toString();
 				ExtentService.getInstance().tryResolveMediaPath(new String[] { url });
 				try {
