@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.5.0 (2020-11-19)
+
+* Support dialect in adapter [Issue 26](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/26)]
+* Upgrade extentreport version
+* Upgrade pdf reporter version
+
 # 2.4.0 (2020-11-05)
 
 * Klov reporter initialization fails with NPE [Issue 24](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/24)]
