@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.6.0 (2020-12-13)
+
+* Support to attach base64 images [Issue 27](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/27)]
+
 # 2.5.0 (2020-11-19)
 
 * Support dialect in adapter [Issue 26](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/26)]
