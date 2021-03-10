@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.7.0 (2021-03-10)
+
+* Incorrect scenario count for tags\categories [Issue 33](https://github.com/grasshopper7/extentreports-cucumber6-adapter/issues/33)]
+
 # 2.6.0 (2020-12-13)
 
 * Support to attach base64 images [Issue 27](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/27)]
