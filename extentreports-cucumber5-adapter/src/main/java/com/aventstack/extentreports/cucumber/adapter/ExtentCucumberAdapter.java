@@ -93,7 +93,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 	private static final AtomicInteger EMBEDDED_INT = new AtomicInteger(0);
 
 	private final TestSourcesModel testSources = new TestSourcesModel();
-	
+
 	private ThreadLocal<URI> currentFeatureFile = new ThreadLocal<>();
 	private ThreadLocal<ScenarioOutline> currentScenarioOutline = new InheritableThreadLocal<>();
 	private ThreadLocal<Examples> currentExamples = new InheritableThreadLocal<>();
@@ -206,9 +206,11 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			break;
 		case "pending":
 			if (strict) {
-				stepTestThreadLocal.get().fail("Step pending");
+				stepTestThreadLocal.get().fail(result.getError());
 				break;
 			}
+			stepTestThreadLocal.get().skip(result.getError());
+			break;
 		case "skipped":
 			if (isHookThreadLocal.get()) {
 				ExtentService.getInstance().removeTest(stepTestThreadLocal.get());
