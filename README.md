@@ -2,7 +2,7 @@ This deals with generating **Extent reports for Cucumber-JVM version 5** using t
 
 To **build** from source use ```install -Dmaven.test.failure.ignore=true``` or ```install -Dmaven.test.skip=true```. This ignores intentional test failures from stopping the build.
 
-**Dependency** - To work with the latest [ExtentReports version 5](https://github.com/extent-framework/extentreports-java/wiki), which includes support for latest **Spark, PDF *(New Feature, check 'Extent PDF Reporter' section below)*, Klov and Json**, add the below dependency. The HTML and Logger reporters, among others, have been deprecated. For more details refer to the **POM Dependencies** section of the [article](http://grasshopper.tech/1697/).
+**Dependency** - To work with the latest [ExtentReports version 5](https://github.com/extent-framework/extentreports-java/wiki), which includes support for latest **Spark, PDF *(New Feature, check 'Extent PDF Reporter' section below)*, Klov and Json**, add the below dependency. The HTML and Logger reporters, among others, have been deprecated. For more details refer to the **POM Dependencies** section of the [article](http://ghchirp.tech/1697/).
 
 ```
 <dependency>
@@ -21,7 +21,7 @@ To work with the older ExtentReports version 4, add the below dependency.
     <version>1.5.1</version>
 </dependency>
 ```
-**Report Attachments** - To add attachments, like screen images, two settings need to be added to the extent.properties. First property, named **screenshot.dir**, is the directory where the attachments are stored. Second is **screenshot.rel.path**, which is the relative path from the report file to the screenshot directory. For more details refer to the **Report Attachments** section of the [article](http://grasshopper.tech/1697/).
+**Report Attachments** - To add attachments, like screen images, two settings need to be added to the extent.properties. First property, named **screenshot.dir**, is the directory where the attachments are stored. Second is **screenshot.rel.path**, which is the relative path from the report file to the screenshot directory. For more details refer to the **Report Attachments** section of the [article](http://ghchirp.tech/1697/).
 
 ```
 extent.reporter.spark.out=test-output/SparkReport/Spark.html
