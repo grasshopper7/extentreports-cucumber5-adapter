@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.8.3 (2021-08-3)
+
+* Remove temporary base64 images for pdf [Issue 31](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/31)]
+* Updated pdf reporter version to 2.2.4
+
 # 2.8.2 (2021-06-12)
 
 * Updated pdf reporter version to 2.2.3
