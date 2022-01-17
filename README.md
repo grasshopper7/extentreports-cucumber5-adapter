@@ -41,7 +41,7 @@ extent.reporter.pdf.out=test output/PdfReport/ExtentPdf.pdf
 ```
 The default color settings can be modified by using a YAML config file, named pdf-config.yaml in the project src/test/resource folder. The detailed documentation for this feature is available in this [article](http://ghchirp.tech/2224/).
 
-**Ported HTML Reporter***(NEW FEATURE)* - The original HTML Extent Reporter was deprecated in 4.1.3 and removed in 5.0.0. The HTML report available in the adapter is based on the same code base and is similar in appearance. The major changes are in the Freemarker template code which have been modified to work with the Extent Reports version 5.
+**Ported HTML Reporter** *(NEW FEATURE)* - The original HTML Extent Reporter was deprecated in 4.1.3 and removed in 5.0.0. The HTML report available in the adapter is based on the same code base and is similar in appearance. The major changes are in the Freemarker template code which have been modified to work with the Extent Reports version 5.
 
 The HTML report needs to be enabled in the extent.properties file.
 ```
