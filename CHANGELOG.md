@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 # 2.9.0 (2022-01-16)
 
-* Add HTMLExtentReporter to adapter [Issue 32](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/32)]
+* Add HTMLExtentReporter to adapter [Issue 32](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/32)
 
 # 2.8.4 (2021-09-14)
 
@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 
 # 2.8.3 (2021-08-3)
 
-* Remove temporary base64 images for pdf [Issue 31](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/31)]
+* Remove temporary base64 images for pdf [Issue 31](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/31)
 * Updated pdf reporter version to 2.2.4
 
 # 2.8.2 (2021-06-12)
@@ -24,45 +24,45 @@ All notable changes to this project will be documented in this file.
 
 # 2.8.0 (2021-04-16)
 
-* Store step pending status exception stacktrace [Issue 29](https://github.com/grasshopper7/extentreports-cucumber6-adapter/issues/29)]
+* Store step pending status exception stacktrace [Issue 29](https://github.com/grasshopper7/extentreports-cucumber6-adapter/issues/29)
 * Updated extentreport version to 5.0.6
 * Updated pdf reporter version to 2.2.0
 
 # 2.7.0 (2021-03-10)
 
-* Incorrect scenario count for tags\categories [Issue 33](https://github.com/grasshopper7/extentreports-cucumber6-adapter/issues/33)]
+* Incorrect scenario count for tags\categories [Issue 33](https://github.com/grasshopper7/extentreports-cucumber6-adapter/issues/33)
 
 # 2.6.0 (2020-12-13)
 
-* Support to attach base64 images [Issue 27](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/27)]
+* Support to attach base64 images [Issue 27](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/27)
 
 # 2.5.0 (2020-11-19)
 
-* Support dialect in adapter [Issue 26](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/26)]
+* Support dialect in adapter [Issue 26](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/26)
 * Upgrade extentreport version
 * Upgrade pdf reporter version
 
 # 2.4.0 (2020-11-05)
 
-* Klov reporter initialization fails with NPE [Issue 24](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/24)]
-* Parallel execution does not work for junit runner [Issue 23](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/23)]
-* Fail pending step in strict mode [Issue 17](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/17)]
+* Klov reporter initialization fails with NPE [Issue 24](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/24)
+* Parallel execution does not work for junit runner [Issue 23](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/23)
+* Fail pending step in strict mode [Issue 17](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/17)
 * Upgrade pdf reporter version
 
 ## 2.3.0 (2020-10-24)
 
-* "Passed" Step duration not correct when multiple logs are attached [Issue 22](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/22)]
+* "Passed" Step duration not correct when multiple logs are attached [Issue 22](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/22)
 
 ## 2.1.0 (2020-10-21)
 
-* Option to customize opening tab of spark report [Issue 21](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/21)]
-* Add support for pdf reporter [Issue 20](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/20)]
-* Ability to determine hook type [Issue 19](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/19)]
-* Add support for parametrized scenario outline names [Issue 18](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/18)]
+* Option to customize opening tab of spark report [Issue 21](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/21)
+* Add support for pdf reporter [Issue 20](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/20)
+* Ability to determine hook type [Issue 19](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/19)
+* Add support for parametrized scenario outline names [Issue 18](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/18)
 
 ## 2.0.0 (2020-09-06)
 
-* Upgrade adapter to support extent version 5 [Issue 11](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/11)]
+* Upgrade adapter to support extent version 5 [Issue 11](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/11)
 
 ## 1.5.1 (2020-08-11)
 
