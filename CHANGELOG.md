@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.10.2 (2022-04-09)
+* Updated HTML extent report version
+
 # 2.10.1 (2022-03-06)
 
 * Updated version for maven replication issues
