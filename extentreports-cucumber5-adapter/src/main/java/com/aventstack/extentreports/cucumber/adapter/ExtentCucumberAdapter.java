@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -306,7 +307,7 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 		}
 	}
 
-	private void handleWrite(WriteEvent event) {
+	private synchronized void handleWrite(WriteEvent event) {
 		String text = event.getText();
 		if (text != null && !text.isEmpty()) {
 			stepTestThreadLocal.get().info(text);
@@ -463,17 +464,46 @@ public class ExtentCucumberAdapter implements ConcurrentEventListener, StrictAwa
 			scenarioThreadLocal.set(t);
 		}
 		if (!testCase.getTags().isEmpty()) {
-			testCase.getTags().forEach(x -> scenarioThreadLocal.get().assignCategory(x));
+			// testCase.getTags().forEach(x -> scenarioThreadLocal.get().assignCategory(x));
+			updateCategoryAndDeviceAndAuthor(testCase.getTags());
 		}
 		if (featureTagsThreadLocal.get() != null) {
-			featureTagsThreadLocal.get().forEach(x -> scenarioThreadLocal.get().assignCategory(x));
+			// featureTagsThreadLocal.get().forEach(x ->
+			// scenarioThreadLocal.get().assignCategory(x));
+			updateCategoryAndDeviceAndAuthor(featureTagsThreadLocal.get());
 		}
 
 		Test parent = scenarioThreadLocal.get().getModel().getParent();
 		if (parent.getBddType() == com.aventstack.extentreports.gherkin.model.ScenarioOutline.class
 				&& scenarioOutlineTagsThreadLocal.get() != null) {
 			scenarioOutlineTagsThreadLocal.get().forEach(x -> scenarioThreadLocal.get().assignCategory(x));
+			updateCategoryAndDeviceAndAuthor(scenarioOutlineTagsThreadLocal.get());
 		}
+	}
+
+	private void updateCategoryAndDeviceAndAuthor(Collection<String> tags) {
+		tags.forEach(t -> {
+			if (ExtentService.isDeviceEnabled() && isValidDeviceTag(t)) {
+
+				scenarioThreadLocal.get().assignDevice(t.substring(ExtentService.getDevicePrefix().length()));
+			} else if (ExtentService.isAuthorEnabled() && isValidAuthoTag(t)) {
+
+				scenarioThreadLocal.get().assignAuthor(t.substring(ExtentService.getAuthorPrefix().length()));
+			} else
+				scenarioThreadLocal.get().assignCategory(t);
+		});
+	}
+
+	private boolean isValidDeviceTag(String tag) {
+		if (tag.startsWith(ExtentService.getDevicePrefix()) && tag.length() > ExtentService.getDevicePrefix().length())
+			return true;
+		return false;
+	}
+
+	private boolean isValidAuthoTag(String tag) {
+		if (tag.startsWith(ExtentService.getAuthorPrefix()) && tag.length() > ExtentService.getAuthorPrefix().length())
+			return true;
+		return false;
 	}
 
 	private synchronized void createTestStep(PickleStepTestStep testStep) {

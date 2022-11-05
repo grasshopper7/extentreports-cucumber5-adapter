@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.14.0 (2022-11-05)
+
+* Add device and author information as tags
+* Base folder report name custom delimiter setting
+
 # 2.13.1 (2022-11-02)
 
 * Fixed tag count & test display for scenario outline [Issue 35](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/35)
