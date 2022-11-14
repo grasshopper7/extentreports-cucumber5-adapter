@@ -1,9 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 2.15.0 (2022-11-14)
+
+* Add support for status filter for html report
+* Updated pdf report data collector version to 2.9.1
+
 # 2.14.3 (2022-11-11)
 
-* Add support for status filter for Spark report [Issue 37](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/37)
+* Add support for status filter for pdf report [Issue 37](https://github.com/grasshopper7/extentreports-cucumber5-adapter/issues/37)
 
 # 2.14.2 (2022-11-10)
 
