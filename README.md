@@ -8,7 +8,7 @@ To **build** from source use ```install -Dmaven.test.failure.ignore=true``` or `
 <dependency>
     <groupId>tech.grasshopper</groupId>
     <artifactId>extentreports-cucumber5-adapter</artifactId>
-    <version>2.15.0</version>
+    <version>2.16.0</version>
 </dependency>
 ```
 
@@ -29,6 +29,20 @@ extent.reporter.spark.out=test-output/SparkReport/Spark.html
 screenshot.dir=test-output/
 screenshot.rel.path=../
 ```
+
+
+**Extent Excel Reporter** *(NEW FEATURE)* - The Excel reporter summarizes the test run results in a **dashboard** and other worksheets with **feature, scenario, exception, tags, authors, devices details**. A complete sample report can be found [here](https://github.com/grasshopper7/cuke5-extent-adapter-report/tree/master/cuke5-extent-adapter-report/excelreport).
+
+
+![sample](https://raw.githubusercontent.com/grasshopper7/extentreports-cucumber5-adapter/master/exceldb.png)
+
+
+The Excel report needs to be enabled in the extent.properties file.
+```
+extent.reporter.excel.start=true
+extent.reporter.excel.out=test output/ExcelReport/ExtentExcel.xlsx
+```
+
 
 **Extent PDF Reporter** *(NEW FEATURE)* - The PDF reporter summarizes the test run results in a **dashboard** and other sections with **feature, scenario and step details**.
 
